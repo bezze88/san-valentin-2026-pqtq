@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>¿Por qué te quiero? 💘</title>
+  <style>
+    :root{
+      --bg1:#0f1020;
+      --bg2:#1b1c35;
+      --card:#ffffff10;
+      --card2:#ffffff14;
+      --text:#f6f7ff;
+      --muted:#c9cbe6;
+      --accent:#ff4d88;
+      --accent2:#7c5cff;
+      --ok:#44d19a;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+      --shadow: 0 12px 36px rgba(0,0,0,.35);
+      --radius: 18px;
+      --pad: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, #2a2b55 0%, transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, #3a1b3e 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+    }
+
+    .app{
+      width: min(720px, 100%);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    header{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding: 10px 6px 0;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .title{
+      font-weight:800;
+      font-size: clamp(18px, 3.8vw, 26px);
+      letter-spacing: .2px;
+    }
+
+    .badge{
+      font-size: 12px;
+      color: var(--muted);
+      background: #00000030;
+      border:1px solid #ffffff1f;
+      padding: 8px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+
+    .progressBox{
+      background: #0000002a;
+      border: 1px solid #ffffff1f;
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .progressBar{
+      height: 12px;
+      border-radius: 999px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .35s ease;
+    }
+    .progressText{
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 0 6px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid #ffffff1f;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--pad);
+      backdrop-filter: blur(10px);
+    }
+
+    .screen{
+      display:none;
+      animation: fadeIn .18s ease;
+    }
+    .screen.active{ display:block; }
+
+    @keyframes fadeIn{
+      from{ opacity:.5; transform: translateY(6px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .subtitle{
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 14px;
+    }
+
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+    .pill{
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid #ffffff1f;
+      background: #00000022;
+      color: var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: var(--text);
+      background: #ffffff12;
+      border:1px solid #ffffff24;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      cursor:pointer;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      flex: 1 1 auto;
+      min-width: 120px;
+    }
+    button:active{ transform: translateY(1px); }
+    button.primary{
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-color: #ffffff30;
+    }
+    button.ghost{
+      background: transparent;
+      border-color: #ffffff22;
+    }
+    button.warn{
+      background: #ffcc661c;
+      border-color: #ffcc6640;
+    }
+    button.danger{
+      background: #ff6b6b1c;
+      border-color: #ff6b6b40;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .input{
+      width:100%;
+      padding: 14px 14px;
+      font-size: 16px;
+      border-radius: 14px;
+      border: 1px solid #ffffff24;
+      background: #00000025;
+      color: var(--text);
+      outline:none;
+    }
+    .input::placeholder{ color:#c9cbe680; }
+
+    .question{
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0 0 6px;
+    }
+
+    .helper{
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+      line-height:1.35;
+    }
+
+    .status{
+      margin-top:10px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 13px;
+      border:1px solid #ffffff1f;
+      background:#00000022;
+      color: var(--muted);
+      display:none;
+    }
+    .status.show{ display:block; }
+    .status.ok{ border-color:#44d19a55; background:#44d19a12; color:#dffcef; }
+    .status.bad{ border-color:#ff6b6b66; background:#ff6b6b12; color:#ffe4e4; }
+    .status.warn{ border-color:#ffcc6666; background:#ffcc6612; color:#fff3d6; }
+
+    .reveal{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .reasonCard{
+      position:relative;
+      overflow:hidden;
+    }
+    .reasonTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .reasonNum{
+      font-weight:900;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .letterToken{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      font-size: 20px;
+      color:#fff;
+      background: linear-gradient(180deg, #ffffff22, #ffffff0f);
+      border:1px solid #ffffff2a;
+      box-shadow: 0 10px 18px rgba(0,0,0,.18);
+    }
+    .reasonTitle{
+      font-weight: 950;
+      font-size: 18px;
+      margin: 0;
+    }
+    .reasonText{
+      margin: 6px 0 0;
+      color: var(--text);
+      line-height:1.4;
+    }
+    .reasonNote{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+      margin-top: 10px;
+    }
+    .tile{
+      padding: 14px;
+      border-radius: 16px;
+      border:1px solid #ffffff1f;
+      background:#00000022;
+      min-height: 68px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .tile strong{ font-size: 14px; }
+    .tile span{ color: var(--muted); font-size: 12px; }
+    .tile .big{ font-size: 26px; }
+    .tile.found{
+      border-color:#44d19a55;
+      background:#44d19a12;
+    }
+
+    .choices{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .choiceBtn{
+      width:100%;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 14px 14px;
+    }
+    .choiceBtn em{
+      font-style:normal;
+      color: var(--muted);
+      font-weight:600;
+      font-size: 13px;
+    }
+
+    /* Memory game */
+    .memory{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:10px;
+    }
+    .mcard{
+      height: 64px;
+      border-radius: 16px;
+      border:1px solid #ffffff1f;
+      background:#00000022;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 28px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+    }
+    .mcard:active{ transform: translateY(1px); }
+    .mcard.open{
+      background:#ffffff12;
+      border-color:#ffffff30;
+    }
+    .mcard.matched{
+      background:#44d19a12;
+      border-color:#44d19a55;
+      cursor:default;
+    }
+
+    /* Gallery */
+    .gallery{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .miniReason{
+      padding: 12px;
+      border-radius: 16px;
+      border:1px solid #ffffff1f;
+      background:#00000022;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .miniReason .miniLetter{
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      background:#ffffff12;
+      border:1px solid #ffffff22;
+      flex:0 0 auto;
+    }
+    .miniReason h4{
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .miniReason p{
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    /* Confetti canvas */
+    #confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 50;
+      display:none;
+    }
+
+    /* Small screens tweaks */
+    @media (max-width: 420px){
+      .memory{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="confetti"></canvas>
+
+<div class="wrap">
+  <div class="app">
+
+    <header>
+      <div class="topRow">
+        <div class="title">¿Por qué te quiero? 💘</div>
+        <div class="badge" id="badge">Agente: nena</div>
+      </div>
+
+      <div class="progressBox" aria-label="progreso">
+        <div class="progressBar" id="progressBar"></div>
+      </div>
+      <div class="progressText">
+        <div id="progressText">Archivo recuperado: 0%</div>
+        <div id="hintText">Pistas: 0</div>
+      </div>
+    </header>
+
+    <!-- INTRO -->
+    <section class="screen card active" id="screen-intro">
+      <div class="hero">
+        <p class="question">Misión para mi nena: recuperar el Archivo “N.E.N.A.”</p>
+        <p class="subtitle">
+          Tendrás que superar <strong>8 pruebas</strong>. Cada una desbloquea un motivo por el que te quiero.
+          <br><br>
+          Regla importante: <strong>no puedes perder</strong>. Si algo se complica, puedes pedir una pista o saltar la prueba.
+        </p>
+        <div class="pillRow">
+          <div class="pill">📱 Optimizado para móvil</div>
+          <div class="pill">🧠 Lógica + memoria</div>
+          <div class="pill">💌 Motivos reales</div>
+          <div class="pill">🎁 Sorpresa final</div>
+        </div>
+
+        <div class="controls">
+          <button class="primary" id="btnStart">Empezar</button>
+          <button class="ghost" id="btnReset">Reiniciar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL -->
+    <section class="screen card" id="screen-level">
+      <p class="question" id="levelTitle"></p>
+      <p class="helper" id="levelDesc"></p>
+
+      <div id="levelBody"></div>
+
+      <div class="status" id="status"></div>
+
+      <div class="controls">
+        <button class="warn" id="btnHint">Pista</button>
+        <button class="ghost" id="btnSkip">Saltar</button>
+      </div>
+    </section>
+
+    <!-- REVEAL -->
+    <section class="screen card" id="screen-reveal">
+      <div class="reveal">
+        <div class="card reasonCard">
+          <div class="reasonTop">
+            <div>
+              <div class="reasonNum" id="reasonNum"></div>
+              <h3 class="reasonTitle" id="reasonTitle"></h3>
+              <p class="reasonText" id="reasonText"></p>
+              <p class="reasonNote" id="reasonNote"></p>
+            </div>
+            <div class="letterToken" id="letterToken">?</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="primary" id="btnNext">Siguiente prueba</button>
+          <button class="ghost" id="btnGallery">Ver motivos desbloqueados</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="screen card" id="screen-gallery">
+      <p class="question">Motivos desbloqueados 💞</p>
+      <p class="helper">Pequeña prueba de que el archivo se está recuperando…</p>
+      <div class="gallery" id="galleryList"></div>
+      <div class="controls">
+        <button class="primary" id="btnBack">Volver</button>
+      </div>
+    </section>
+
+    <!-- FIN -->
+    <section class="screen card" id="screen-finish">
+      <p class="question">Archivo completo ✅</p>
+      <p class="subtitle">
+        Has recuperado el Archivo N.E.N.A. por completo.
+        <br><br>
+        <strong>Te quiero muchísimo</strong>. Y esto solo es una parte.
+      </p>
+
+      <div class="card" style="margin-top:10px;">
+        <p class="helper" style="margin:0;">
+          Premio desbloqueado 🎁:
+        </p>
+        <p style="margin:8px 0 0; font-weight:900; font-size:16px;">
+          Vale por: “plan sorpresa contigo” (canjeable cuando tú quieras).
+        </p>
+        <p class="helper" style="margin:8px 0 0;">
+          Pista: puede incluir spa, una escapadita, comida rica… o todo junto 😌✨
+        </p>
+      </div>
+
+      <div class="controls">
+        <button class="primary" id="btnReplay">Volver a jugar</button>
+        <button class="ghost" id="btnGallery2">Ver todos los motivos</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* -----------------------------
+   Datos del juego (edita aquí)
+-------------------------------- */
+const GAME = {
+  agentName: "nena",
+  levels: [
+    {
+      id: 1,
+      type: "text",
+      title: "Prueba 1/8 — Memoria de nosotros",
+      desc: "Pregunta rápida. (No te preocupes, aquí nadie suspende).",
+      question: "¿Dónde fue nuestro primer viaje juntos?",
+      placeholder: "Escribe el lugar…",
+      answers: ["panticosa", "balneario de panticosa", "balneario panticosa", "panticosa (balneario)", "balneario panticosa, panticosa"],
+      hint: "Pista: había agua calentita… ♨️ y montaña. Empieza por “P”.",
+      reveal: {
+        letter: "N",
+        num: 1,
+        title: "Recuerdos maravillosos",
+        text: "Te quiero por los recuerdos maravillosos que me das.",
+        note: "Letra recuperada: N"
+      }
+    },
+    {
+      id: 2,
+      type: "logic",
+      title: "Prueba 2/8 — Lógica",
+      desc: "Completa la secuencia. Es más fácil de lo que parece.",
+      sequence: [2, 3, 5, 8, 13],
+      answer: "21",
+      hint: "Pista: cada número es la suma de los dos anteriores.",
+      reveal: {
+        letter: "E",
+        num: 2,
+        title: "Tu cabeza brillante",
+        text: "Te quiero porque tu forma de pensar me encanta y me inspira.",
+        note: "Letra recuperada: E"
+      }
+    },
+    {
+      id: 3,
+      type: "explore",
+      title: "Prueba 3/8 — Exploración",
+      desc: "Encuentra 3 pistas tocando los objetos correctos.",
+      hint: "Pista: una pista huele a spa ♨️, otra sabe a mar 🌊 y otra suena a música 🎵.",
+      items: [
+        { key:"spa", label:"Tarjeta de spa", icon:"♨️", foundText:"Panticosa desbloqueado." },
+        { key:"sea", label:"Postal del mar", icon:"🌊", foundText:"Bermeo asoma por aquí." },
+        { key:"song", label:"Nota musical", icon:"🎵", foundText:"Tu primera canción tiene peso." },
+        { key:"fake1", label:"Llave vieja", icon:"🗝️", foundText:"No es esta… pero bonita." },
+        { key:"fake2", label:"Café frío", icon:"☕", foundText:"Nope. Pero me lo tomaría contigo." },
+        { key:"fake3", label:"Gafas", icon:"🕶️", foundText:"Demasiado cool, pero no." }
+      ],
+      needed: ["spa","sea","song"],
+      reveal: {
+        letter: "N",
+        num: 3,
+        title: "Tu energía de sorpresa",
+        text: "Te quiero porque conviertes cualquier plan en una aventura con ilusión.",
+        note: "Letra recuperada: N"
+      }
+    },
+    {
+      id: 4,
+      type: "text",
+      title: "Prueba 4/8 — Recuerdo musical",
+      desc: "Una pista muy nuestra.",
+      question: "¿Cuál fue la primera canción que te mandé?",
+      placeholder: "Título de la canción…",
+      answers: [
+        "sueltate el pelo",
+        "suéltate el pelo",
+        "suelta te el pelo",
+        "sueltate el pelo de antoñito molina",
+        "suéltate el pelo de antoñito molina"
+      ],
+      hint: "Pista: empieza por “S” y va de soltarse un poco 😄",
+      reveal: {
+        letter: "A",
+        num: 4,
+        title: "Madre",
+        text: "Tu paciencia y el amor de madre que tienes. Te quiero por eso.",
+        note: "Letra recuperada: A (ya casi tienes el código)"
+      }
+    },
+    {
+      id: 5,
+      type: "anagram",
+      title: "Prueba 5/8 — Palabra desordenada",
+      desc: "Ordena las letras y escribe el resultado.",
+      scrambled: "O E B R M E",
+      answer: "bermeo",
+      hint: "Pista: fue el viaje del mejor cumpleaños de mi vida.",
+      reveal: {
+        letter: "—",
+        num: 5,
+        title: "Tu detalle conmigo",
+        text: "Te quiero porque me haces sentir querido con gestos que no se olvidan.",
+        note: "Ese viaje… fue un regalo enorme para mí."
+      }
+    },
+    {
+      id: 6,
+      type: "memory",
+      title: "Prueba 6/8 — Memory",
+      desc: "Encuentra las parejas. Son 4 pares (rápido y bonito).",
+      hint: "Pista: concéntrate en el patrón, no en la prisa. Tú esto lo bordas 😌",
+      pairs: ["♨️","🌊","🎵","🎁"],
+      reveal: {
+        letter: "—",
+        num: 6,
+        title: "Tu memoria (y la nuestra)",
+        text: "Te quiero porque hacer las cosas en pareja contigo pesan bonito y se quedan.",
+        note: "Y porque eres una maravilla."
+      }
+    },
+    {
+      id: 7,
+      type: "choice",
+      title: "Prueba 7/8 — Elige tu sorpresa",
+      desc: "Elijas lo que elijas… la respuesta es correcta.",
+      hint: "Pista: la mejor opción siempre es “contigo”.",
+      options: [
+        { icon:"🍣", text:"Plan foodie: cena rica y postre obligatorio", note:"Team postre." },
+        { icon:"🧳", text:"Mini-escapada: carretera, risas y música", note:"Modo aventura." },
+		{ icon:"🌙", text:"Plan tranquilo: peli + manta + abrazo infinito", note:"Suena a hogar." }
+      ],
+      reveal: {
+        letter: "—",
+        num: 7,
+        title: "Tu compañía",
+        text: "Te quiero porque contigo cualquier plan se vuelve mi plan favorito.",
+        note: "Y eso es magia."
+      }
+    },
+    {
+      id: 8,
+      type: "finalcode",
+      title: "Prueba 8/8 — Código del Archivo",
+      desc: "Introduce el código con las letras grandes recuperadas en los motivos.",
+      hint: "Pista: mira las letras (tokens) de los motivos 1–4 😉",
+      answer: "nena",
+      reveal: {
+        letter: "💘",
+        num: 8,
+        title: "Archivo N.E.N.A.",
+        text: "Te quiero, nena. Y elegirte es mi cosa favorita.",
+        note: "Misión completada."
+      }
+    }
+  ]
+};
+
+/* -----------------------------
+   Estado + utilidades
+-------------------------------- */
+const STORAGE_KEY = "porque_te_quiero_v1";
+
+const state = {
+  started: false,
+  levelIndex: 0,         // 0..7
+  hintsUsed: 0,
+  unlocked: [],          // array of reveal objects
+  exploreFound: {},      // per level id
+  memory: {}             // per level id memory state
+};
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function load(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return false;
+  try{
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+function resetAll(){
+  localStorage.removeItem(STORAGE_KEY);
+  state.started = false;
+  state.levelIndex = 0;
+  state.hintsUsed = 0;
+  state.unlocked = [];
+  state.exploreFound = {};
+  state.memory = {};
+  updateUI();
+  showScreen("intro");
+}
+
+function normalize(s){
+  return (s ?? "")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")  // quita tildes
+    .replace(/\s+/g," ");
+}
+
+function pct(){
+  const total = GAME.levels.length;
+  const done = state.unlocked.length;
+  return Math.round((done/total) * 100);
+}
+
+function currentLevel(){
+  return GAME.levels[state.levelIndex];
+}
+
+function showScreen(name){
+  const ids = ["intro","level","reveal","gallery","finish"];
+  ids.forEach(id=>{
+    document.getElementById("screen-"+id).classList.toggle("active", id===name);
+  });
+}
+
+function setStatus(msg, kind="warn"){
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.className = "status show " + kind;
+}
+
+/* -----------------------------
+   Render de nivel
+-------------------------------- */
+function renderLevel(){
+  const L = currentLevel();
+
+  document.getElementById("levelTitle").textContent = L.title;
+  document.getElementById("levelDesc").textContent  = L.desc;
+
+  const body = document.getElementById("levelBody");
+  body.innerHTML = "";
+
+  // reset status
+  document.getElementById("status").className = "status";
+  document.getElementById("status").textContent = "";
+
+  // Pista / Saltar visibles siempre
+  document.getElementById("btnHint").onclick = () => {
+    state.hintsUsed++;
+    save();
+    updateUI();
+    setStatus(L.hint, "warn");
+  };
+  document.getElementById("btnSkip").onclick = () => {
+    // saltar igual desbloquea
+    unlockReveal(false);
+  };
+
+  if(L.type === "text"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = L.question;
+    body.appendChild(q);
+
+    const input = document.createElement("input");
+    input.className = "input";
+    input.placeholder = L.placeholder || "Escribe aquí…";
+    input.autocomplete = "off";
+    input.inputMode = "text";
+    body.appendChild(input);
+
+    const row = document.createElement("div");
+    row.className = "controls";
+    const btn = document.createElement("button");
+    btn.className = "primary";
+    btn.textContent = "Comprobar";
+    btn.onclick = () => {
+      const ans = normalize(input.value);
+      const ok = L.answers.some(a => normalize(a) === ans) || L.answers.some(a => ans.includes(normalize(a)));
+      if(ok){
+        unlockReveal(true);
+      }else{
+        setStatus("Casi 😄 Prueba con otra forma de decirlo o pide una pista.", "bad");
+      }
+    };
+    row.appendChild(btn);
+    body.appendChild(row);
+
+  } else if(L.type === "logic"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = `Completa: ${L.sequence.join(", ")}, …`;
+    body.appendChild(q);
+
+    const input = document.createElement("input");
+    input.className = "input";
+    input.placeholder = "¿Cuál es el siguiente número?";
+    input.inputMode = "numeric";
+    body.appendChild(input);
+
+    const row = document.createElement("div");
+    row.className = "controls";
+    const btn = document.createElement("button");
+    btn.className = "primary";
+    btn.textContent = "Comprobar";
+    btn.onclick = () => {
+      const ans = normalize(input.value);
+      if(ans === normalize(L.answer)){
+        unlockReveal(true);
+      }else{
+        setStatus("Mmm… no pasa nada. Intenta ver el patrón o pide pista 😉", "bad");
+      }
+    };
+    row.appendChild(btn);
+    body.appendChild(row);
+
+  } else if(L.type === "explore"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = "Toca objetos para encontrar las 3 pistas correctas.";
+    body.appendChild(q);
+
+    const found = state.exploreFound[L.id] || {};
+    state.exploreFound[L.id] = found;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    L.items.forEach(it=>{
+      const tile = document.createElement("div");
+      tile.className = "tile" + (found[it.key] ? " found" : "");
+      tile.innerHTML = `
+        <div>
+          <strong>${it.label}</strong><br/>
+          <span>${found[it.key] ? it.foundText : "Toca para investigar…"}</span>
+        </div>
+        <div class="big">${it.icon}</div>
+      `;
+      tile.onclick = () => {
+        if(found[it.key]) return;
+        found[it.key] = true;
+        save();
+        renderLevel(); // re-render
+        // Mensaje rápido
+        setStatus(it.foundText, L.needed.includes(it.key) ? "ok" : "warn");
+
+        // ¿completado?
+        const ok = L.needed.every(k => found[k]);
+        if(ok){
+          // pequeño delay para que se vea el último mensaje
+          setTimeout(()=> unlockReveal(true), 450);
+        }
+      };
+      grid.appendChild(tile);
+    });
+
+    body.appendChild(grid);
+
+    const neededLeft = L.needed.filter(k => !found[k]).length;
+    const note = document.createElement("p");
+    note.className = "helper";
+    note.style.marginTop = "10px";
+    note.textContent = `Te faltan ${neededLeft} pista(s) correcta(s).`;
+    body.appendChild(note);
+
+  } else if(L.type === "anagram"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = `Ordena las letras: ${L.scrambled}`;
+    body.appendChild(q);
+
+    const input = document.createElement("input");
+    input.className = "input";
+    input.placeholder = "Escribe la palabra ordenada…";
+    input.autocomplete = "off";
+    body.appendChild(input);
+
+    const row = document.createElement("div");
+    row.className = "controls";
+    const btn = document.createElement("button");
+    btn.className = "primary";
+    btn.textContent = "Comprobar";
+    btn.onclick = () => {
+      const ans = normalize(input.value).replace(/\s+/g,"");
+      if(ans === normalize(L.answer)){
+        unlockReveal(true);
+      }else{
+        setStatus("No pasa nada 😄 Intenta imaginar el recuerdo asociado.", "bad");
+      }
+    };
+    row.appendChild(btn);
+    body.appendChild(row);
+
+  } else if(L.type === "memory"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = "Encuentra las parejas.";
+    body.appendChild(q);
+
+    // inicializa tablero si no existe
+    if(!state.memory[L.id]){
+      const icons = [...L.pairs, ...L.pairs];
+      shuffle(icons);
+      state.memory[L.id] = {
+        icons,
+        open: [],     // indices abiertos
+        matched: []   // indices matched
+      };
+      save();
+    }
+    const mem = state.memory[L.id];
+
+    const info = document.createElement("p");
+    info.className = "helper";
+    info.textContent = "Consejo: abre dos cartas, memoriza, y repite. Sin prisa 🙂";
+    body.appendChild(info);
+
+    const grid = document.createElement("div");
+    grid.className = "memory";
+
+    mem.icons.forEach((icon, idx)=>{
+      const c = document.createElement("div");
+      const isOpen = mem.open.includes(idx);
+      const isMatched = mem.matched.includes(idx);
+      c.className = "mcard" + (isOpen ? " open" : "") + (isMatched ? " matched" : "");
+      c.textContent = (isOpen || isMatched) ? icon : "•";
+      c.onclick = () => onFlipMemory(L.id, idx);
+      grid.appendChild(c);
+    });
+
+    body.appendChild(grid);
+
+    const donePairs = mem.matched.length / 2;
+    const prog = document.createElement("p");
+    prog.className = "helper";
+    prog.style.marginTop = "10px";
+    prog.textContent = `Parejas encontradas: ${donePairs} / ${L.pairs.length}`;
+    body.appendChild(prog);
+
+    if(mem.matched.length === mem.icons.length){
+      setTimeout(()=> unlockReveal(true), 500);
+    }
+
+  } else if(L.type === "choice"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = "Elige un plan:";
+    body.appendChild(q);
+
+    const box = document.createElement("div");
+    box.className = "choices";
+
+    L.options.forEach((opt, i)=>{
+      const b = document.createElement("button");
+      b.className = "choiceBtn";
+      b.innerHTML = `<span>${opt.icon} ${opt.text}<br/><em>${opt.note}</em></span><span>→</span>`;
+      b.onclick = () => {
+        setStatus(`Elegido: ${opt.text} — y sí: me parece perfecto contigo 💞`, "ok");
+        setTimeout(()=> unlockReveal(true), 500);
+      };
+      box.appendChild(b);
+    });
+
+    body.appendChild(box);
+
+  } else if(L.type === "finalcode"){
+    const q = document.createElement("p");
+    q.className = "question";
+    q.textContent = "Introduce el código:";
+    body.appendChild(q);
+
+    const input = document.createElement("input");
+    input.className = "input";
+    input.placeholder = "Código…";
+    input.autocomplete = "off";
+    input.maxLength = 12;
+    body.appendChild(input);
+
+    const row = document.createElement("div");
+    row.className = "controls";
+    const btn = document.createElement("button");
+    btn.className = "primary";
+    btn.textContent = "Desbloquear";
+    btn.onclick = () => {
+      const ans = normalize(input.value).replace(/\s+/g,"");
+      if(ans === normalize(L.answer)){
+        unlockReveal(true);
+      }else{
+        setStatus("Casi… piensa en las letras grandes de los motivos 1–4 😉", "bad");
+      }
+    };
+    row.appendChild(btn);
+    body.appendChild(row);
+
+    const letters = state.unlocked
+      .slice(0,4)
+      .map(r => r.letter)
+      .filter(x => x && x !== "—" && x !== "💘")
+      .join("");
+
+    const hint = document.createElement("p");
+    hint.className = "helper";
+    hint.style.marginTop = "10px";
+    hint.textContent = letters ? `Letras recuperadas (1–4): ${letters}` : "Aún no tienes todas las letras. (Si estás aquí, usa “Saltar” para seguir).";
+    body.appendChild(hint);
+  }
+}
+
+/* -----------------------------
+   Memory logic
+-------------------------------- */
+let memoryLock = false;
+
+function onFlipMemory(levelId, idx){
+  if(memoryLock) return;
+  const mem = state.memory[levelId];
+  if(mem.matched.includes(idx)) return;
+  if(mem.open.includes(idx)) return;
+
+  mem.open.push(idx);
+  save();
+  renderLevel();
+
+  if(mem.open.length === 2){
+    memoryLock = true;
+    const [a,b] = mem.open;
+    const ok = mem.icons[a] === mem.icons[b];
+
+    setTimeout(()=>{
+      if(ok){
+        mem.matched.push(a,b);
+        setStatus("¡Pareja! 😄", "ok");
+      }else{
+        setStatus("No pasa nada, tú puedes 😌", "warn");
+      }
+      mem.open = [];
+      memoryLock = false;
+      save();
+      renderLevel();
+    }, 520);
+  }
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+/* -----------------------------
+   Reveal + navegación
+-------------------------------- */
+function unlockReveal(fromCorrect){
+  const L = currentLevel();
+
+  // Evita duplicar si ya está desbloqueado este nivel (por recarga rara)
+  if(state.unlocked.find(u => u.num === L.reveal.num)) {
+    goNext();
+    return;
+  }
+
+  state.unlocked.push(L.reveal);
+  save();
+  updateUI();
+
+  // Render reveal
+  document.getElementById("reasonNum").textContent = `Motivo #${L.reveal.num}`;
+  document.getElementById("reasonTitle").textContent = L.reveal.title;
+  document.getElementById("reasonText").textContent = L.reveal.text;
+
+  const extra = fromCorrect ? L.reveal.note : (L.reveal.note + " (Igualmente lo mereces 💞)");
+  document.getElementById("reasonNote").textContent = extra;
+
+  document.getElementById("letterToken").textContent = L.reveal.letter || "—";
+
+  document.getElementById("btnNext").onclick = () => goNext();
+  document.getElementById("btnGallery").onclick = () => { renderGallery(); showScreen("gallery"); };
+
+  showScreen("reveal");
+}
+
+function goNext(){
+  if(state.levelIndex < GAME.levels.length - 1){
+    state.levelIndex++;
+    state.started = true;
+    save();
+    updateUI();
+    showScreen("level");
+    renderLevel();
+  }else{
+    // Fin real: mostrar finish + confetti
+    state.started = true;
+    save();
+    updateUI();
+    showScreen("finish");
+    startConfetti(2200);
+  }
+}
+
+/* -----------------------------
+   Galería
+-------------------------------- */
+function renderGallery(){
+  const list = document.getElementById("galleryList");
+  list.innerHTML = "";
+
+  // Si aún no hay nada
+  if(state.unlocked.length === 0){
+    const p = document.createElement("p");
+    p.className = "helper";
+    p.textContent = "Aún no has desbloqueado motivos. ¡Empieza la misión!";
+    list.appendChild(p);
+    return;
+  }
+
+  state.unlocked.forEach(r=>{
+    const item = document.createElement("div");
+    item.className = "miniReason";
+    item.innerHTML = `
+      <div class="miniLetter">${r.letter || "—"}</div>
+      <div>
+        <h4>Motivo #${r.num} — ${r.title}</h4>
+        <p>${r.text}</p>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+/* -----------------------------
+   UI
+-------------------------------- */
+function updateUI(){
+  document.getElementById("badge").textContent = `Agente: ${GAME.agentName}`;
+  document.getElementById("progressBar").style.width = pct() + "%";
+  document.getElementById("progressText").textContent = `Archivo recuperado: ${pct()}%`;
+  document.getElementById("hintText").textContent = `Pistas: ${state.hintsUsed}`;
+}
+
+function startGame(){
+  state.started = true;
+  save();
+  updateUI();
+  showScreen("level");
+  renderLevel();
+}
+
+function resumeIfPossible(){
+  updateUI();
+  if(state.started){
+    // si ya terminó todos
+    if(state.unlocked.length >= GAME.levels.length){
+      showScreen("finish");
+    }else{
+      showScreen("level");
+      renderLevel();
+    }
+  }else{
+    showScreen("intro");
+  }
+}
+
+/* -----------------------------
+   Confetti simple (sin librerías)
+-------------------------------- */
+function startConfetti(ms=2000){
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.style.display = "block";
+
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  function resize(){
+    canvas.width = Math.floor(innerWidth * dpr);
+    canvas.height = Math.floor(innerHeight * dpr);
+    canvas.style.width = innerWidth + "px";
+    canvas.style.height = innerHeight + "px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  window.addEventListener("resize", resize, { passive:true });
+
+  const pieces = [];
+  const colors = ["#ff4d88","#7c5cff","#44d19a","#ffcc66","#ffffff"];
+  const count = Math.min(140, Math.floor(innerWidth/4));
+
+  for(let i=0;i<count;i++){
+    pieces.push({
+      x: Math.random()*innerWidth,
+      y: -20 - Math.random()*innerHeight*0.4,
+      r: 4 + Math.random()*5,
+      vx: -2 + Math.random()*4,
+      vy: 2 + Math.random()*4,
+      a: Math.random()*Math.PI*2,
+      va: -0.2 + Math.random()*0.4,
+      c: colors[Math.floor(Math.random()*colors.length)],
+      s: 0.7 + Math.random()*0.8
+    });
+  }
+
+  let start = performance.now();
+  function tick(t){
+    const elapsed = t - start;
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+
+    for(const p of pieces){
+      p.x += p.vx;
+      p.y += p.vy;
+      p.a += p.va;
+      p.vy += 0.01; // gravedad suave
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = 0.95;
+      ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2*p.s);
+      ctx.restore();
+    }
+
+    if(elapsed < ms){
+      requestAnimationFrame(tick);
+    }else{
+      canvas.style.display = "none";
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      window.removeEventListener("resize", resize);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+/* -----------------------------
+   Eventos
+-------------------------------- */
+document.getElementById("btnStart").onclick = () => {
+  state.levelIndex = 0;
+  state.unlocked = [];
+  state.hintsUsed = 0;
+  state.exploreFound = {};
+  state.memory = {};
+  startGame();
+};
+
+document.getElementById("btnReset").onclick = resetAll;
+
+document.getElementById("btnBack").onclick = () => {
+  showScreen("level");
+  renderLevel();
+};
+
+document.getElementById("btnReplay").onclick = () => {
+  resetAll();
+};
+
+document.getElementById("btnGallery2").onclick = () => {
+  renderGallery();
+  showScreen("gallery");
+};
+
+/* -----------------------------
+   Init
+-------------------------------- */
+(function init(){
+  load(); // si existe, reanuda
+  updateUI();
+  resumeIfPossible();
+})();
+</script>
+</body>
+</html>
